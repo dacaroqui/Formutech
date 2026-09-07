@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { ListFilter } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export type FilterChoice = {
 export function SolutionsFilters({
   familyOptions,
   sheetOptions,
-  clearHref}
+  clearHref,
   activeCount,
 }: {
   familyOptions: FilterChoice[];
@@ -25,47 +25,36 @@ export function SolutionsFilters({
   clearHref: string;
   activeCount: number;
 }) {
-  const [open, setOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const menuId = useId();
+  const detailsRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
-    if (!open) return;
+    function onPointerDown(e: PointerEvent) {
+      const details = detailsRef.current;
+      if (!details?.open || details.contains(e.target as Node)) return;
+      details.removeAttribute("open");
+    }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      const details = detailsRef.current;
+      if (e.key === "Escape" && details?.open) details.removeAttribute("open");
     }
-    function onDocClick(e: MouseEvent) {
-      const t = e.target as Node;
-      if (triggerRef.current?.contains(t) || menuRef.current?.contains(t)) return;
-      setOpen(false);
-    }
+    document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKey);
-    const id = window.setTimeout(() => {
-      document.addEventListener("click", onDocClick);
-    }, 0);
     return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKey);
-      window.clearTimeout(id);
-      document.removeEventListener("click", onDocClick);
     };
-  }, [open]);
+  }, []);
 
   return (
-    <div className="relative shrink-0">
-      <button
-        ref={triggerRef}
-        type="button"
+    <details ref={detailsRef} className="group relative shrink-0">
+      <summary
         aria-label="Filtros"
         title="Filtros"
-        aria-expanded={open}
-        aria-controls={menuId}
-        aria-haspopup="dialog"
-        onClick={() => setOpen((v) => !v)}
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-lg" }),
-          "relative size-11 rounded-2xl border-border bg-white text-ink shadow-none",
-          (open || activeCount > 0) && "border-gold/60 bg-accent"
+          "relative size-11 cursor-pointer list-none rounded-2xl border-border bg-white text-ink shadow-none [&::-webkit-details-marker]:hidden [&::marker]:hidden",
+          "group-open:border-gold/60 group-open:bg-accent",
+          activeCount > 0 && "border-gold/60 bg-accent"
         )}
       >
         <ListFilter className="size-5" />
@@ -74,56 +63,40 @@ export function SolutionsFilters({
             {activeCount}
           </span>
         )}
-      </button>
-      {open && (
-        <div
-          ref={menuRef}
-          id={menuId}
-          role="dialog"
-          aria-label="Filtros"
-          className="absolute right-0 top-[calc(100%+8px)] z-[100] flex w-[min(20rem,calc(100vw-2rem))] max-h-[min(28rem,70vh)] flex-col overflow-y-auto rounded-2xl bg-white shadow-[0_18px_40px_-24px_rgba(28,36,24,0.55)] ring-1 ring-foreground/10"
-        >
-          <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-white px-4 py-3">
-            <p className="text-base font-semibold text-ink">Filtros</p>
-            <Link
-              href={clearHref}
-              scroll={false}
-              onClick={() => setOpen(false)}
-              className="text-sm font-medium text-muted-foreground hover:text-gold"
-            >
-              Limpiar filtros
-            </Link>
-          </div>
-          <FilterGroup
-            title="Familia"
-            options={familyOptions}
-            onPick={() => setOpen(false)}
-          />
-          <FilterGroup
-            title="Ficha técnica"
-            options={sheetOptions}
-            onPick={() => setOpen(false)}
-            className="border-t border-border"
-          />
+      </summary>
+      <div className="absolute right-0 top-[calc(100%+8px)] z-[100] flex w-[min(20rem,calc(100vw-2rem))] max-h-[min(28rem,70vh)] flex-col overflow-y-auto rounded-2xl bg-white shadow-[0_18px_40px_-24px_rgba(28,36,24,0.55)] ring-1 ring-foreground/10">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-white px-4 py-3">
+          <p className="text-base font-semibold text-ink">Filtros</p>
+          <Link
+            href={clearHref}
+            scroll={false}
+            className="text-sm font-medium text-muted-foreground hover:text-gold"
+          >
+            Limpiar filtros
+          </Link>
         </div>
-      )}
-    </div>
+        <FilterGroup title="Familia" options={familyOptions} />
+        <FilterGroup
+          title="Ficha técnica"
+          options={sheetOptions}
+          className="border-t border-border"
+        />
+      </div>
+    </details>
   );
 }
 
 function FilterGroup({
   title,
   options,
-  onPick,
   className,
 }: {
   title: string;
   options: FilterChoice[];
-  onPick: () => void;
   className?: string;
 }) {
   return (
-    <div className={cn("px-2 pi-2", className)}>
+    <div className={cn("px-2 py-2", className)}>
       <p className="px-2 pb-1.5 text-[11px] font-semibold tracking-[0.18em] text-gold uppercase">
         {title}
       </p>
@@ -134,7 +107,6 @@ function FilterGroup({
               href={option.href}
               scroll={false}
               aria-current={option.active ? "page" : undefined}
-              onClick={onPick}
               className={cn(
                 "flex items-center gap-3 rounded-xl px-2 py-2 text-sm transition",
                 option.active ? "bg-accent text-ink" : "text-ink/80 hover:bg-muted"
