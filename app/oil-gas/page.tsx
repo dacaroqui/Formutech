@@ -6,13 +6,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Oil & Gas · especialidades químicas",
   description:
-    "Formulación y especialidades para fluidos de perforación. Fichas de Formu-Clay, Formu-PolyClay, Formu-ROP, Formu-LUB y Formu-ASF.",
+    "Formulación y especialidades para fluidos de perforación. Fichas de Formu-Clay, Formu-PolyClay, Formu-NanoClay, Formu-ROP, Formu-LUB, Formu-ASF, Formu-Foam, Formu-BIO y Formu-OXY.",
 };
 
 export default async function OilGasPage({
   searchParams,
 }: {
-  searchParams: Promise<{ familia?: string | string[]; ficha?: string | string[]; q?: string | string[] }>;
+  searchParams: Promise<{ familia?: string | string[]; q?: string | string[] }>;
 }) {
   const filters = solutionsFromSearchParams("oil-gas", await searchParams);
   return (

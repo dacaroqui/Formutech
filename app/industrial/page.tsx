@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function IndustrialPage({
   searchParams,
 }: {
-  searchParams: Promise<{ familia?: string | string[]; ficha?: string | string[]; q?: string | string[] }>;
+  searchParams: Promise<{ familia?: string | string[]; q?: string | string[] }>;
 }) {
   const filters = solutionsFromSearchParams("industrial", await searchParams);
   return (
