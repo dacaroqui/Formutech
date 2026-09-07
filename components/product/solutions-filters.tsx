@@ -77,6 +77,7 @@ export function SolutionsFilters({
           title="Ficha técnica"
           options={sheetOptions}
           onPick={() => setOpen(false)}
+          className="border-t border-border"
         />
       </PopoverContent>
     </Popover>
@@ -87,13 +88,15 @@ function FilterGroup({
   title,
   options,
   onPick,
+  className,
 }: {
   title: string;
   options: FilterChoice[];
   onPick: () => void;
+  className?: string;
 }) {
   return (
-    <div className="px-2 py-2">
+    <div className={cn("px-2 py-2", className)}>
       <p className="px-2 pb-1.5 text-[11px] font-semibold tracking-[0.18em] text-gold uppercase">
         {title}
       </p>
@@ -120,7 +123,14 @@ function FilterGroup({
                 {option.active && <span className="size-2 rounded-full bg-primary" />}
               </span>
               <span className="min-w-0 flex-1 font-medium">{option.label}</span>
-              <span className="tabular-nums text-xs text-muted-foreground">{option.count}</span>
+              <span
+                className={cn(
+                  "tabular-nums text-xs",
+                  option.active ? "font-semibold text-primary" : "text-muted-foreground"
+                )}
+              >
+                {option.count}
+              </span>
             </Link>
           </li>
         ))}
