@@ -31,13 +31,13 @@ npm start
 - Soluciones con pestañas Industrial / Oil & Gas y buscador de referencias
 - Familias industriales (hidráulico, metalworking, textil, anticorrosivo, dieléctrico, MW-70)
 - Selector de viscosidad FormuLub ISO 32 / 46 / 68 / 100 con datos de ficha técnica
-- Especialidades Oil & Gas con fichas de Formu-Clay, Formu-PolyClay, Formu-ROP, Formu-LUB M, Formu-LUB V y Formu-ASF (el resto, sin cifras inventadas)
+- Especialidades Oil & Gas con ficha de cada referencia
 - Método en el inicio, diagnóstico de operación y Sobre FormuTech
 - CTA *Hablemos de tu operación* por WhatsApp
 
 ## Datos técnicos
 
-Las especificaciones publicadas salen de las fichas técnicas oficiales de FormuTech (FormuLub ISO, FormuLub-Sol, FormuLub-Sol SSYNT, FormuLub-Sol SYNT, Formu-Tex, Formu-Cor, FormuLub-MW 70, Formu-Clay, Formu-PolyClay, Formu-ROP, Formu-LUB M, Formu-LUB V y Formu-ASF). Donde no hay ficha, la página deja el campo vacío y pide acompañamiento. Los aceites hidráulicos se presentan bajo normas DIN, ASTM, ISO y OEM, según indicación comercial de FormuTech.
+Las especificaciones publicadas salen de las fichas técnicas de FormuTech. Los aceites hidráulicos se presentan bajo normas DIN, ASTM, ISO y OEM, según indicación comercial de FormuTech.
 
 El logo usado es el lockup oficial de FormuTech (símbolo + wordmark + tagline), sin redibujar el símbolo.
 
