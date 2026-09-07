@@ -16,12 +16,10 @@ export type FilterChoice = {
 
 export function SolutionsFilters({
   familyOptions,
-  sheetOptions,
   clearHref,
   activeCount,
 }: {
   familyOptions: FilterChoice[];
-  sheetOptions: FilterChoice[];
   clearHref: string;
   activeCount: number;
 }) {
@@ -76,11 +74,6 @@ export function SolutionsFilters({
           </Link>
         </div>
         <FilterGroup title="Familia" options={familyOptions} />
-        <FilterGroup
-          title="Ficha técnica"
-          options={sheetOptions}
-          className="border-t border-border"
-        />
       </div>
     </details>
   );
