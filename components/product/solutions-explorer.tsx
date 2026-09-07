@@ -13,15 +13,11 @@ import {
   parseIndustrialFilter,
   parseOilGasFilter,
   parseQuery,
-  parseSheetFilter,
-  sheetFilterIds,
-  sheetFilterLabels,
   solutionsHref,
   type IndustrialFilter,
   type OilGasFilter,
-  type SheetFilter,
 } from "@/lib/solutions-filter";
-import { industrialFamilies, oilGasProducts, products } from "@/lib/products";
+import { industrialFamilies, oilGasProducts } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 type Tab = "industrial" | "oil-gas";
@@ -29,59 +25,43 @@ type Tab = "industrial" | "oil-gas";
 export function SolutionsExplorer({
   tab,
   family,
-  sheet,
   q,
 }: {
   tab: Tab;
   family: IndustrialFilter | OilGasFilter;
-  sheet: SheetFilter;
   q: string;
 }) {
   const industrial = applyIndustrialFilters(
     tab === "industrial" ? (family as IndustrialFilter) : "all",
-    sheet,
     q,
-    industrialFamilies,
-    products
+    industrialFamilies
   );
   const oilgas = applyOilGasFilters(
     tab === "oil-gas" ? (family as OilGasFilter) : "all",
-    sheet,
     q,
     oilGasProducts
   );
   const items = tab === "industrial" ? industrial : oilgas;
   const otherCount = tab === "industrial" ? oilgas.length : industrial.length;
-  const filtersOn = family !== "all" || sheet !== "all" || q.length > 0;
+  const filtersOn = family !== "all" || q.length > 0;
   const familyOptions =
     tab === "industrial"
       ? industrialFilterIds.map((id) => ({
           id,
           label: industrialFilterLabels[id],
-          href: solutionsHref(tab, id, sheet, q),
-          count: applyIndustrialFilters(id, sheet, q, industrialFamilies, products).length,
+          href: solutionsHref(tab, id, q),
+          count: applyIndustrialFilters(id, q, industrialFamilies).length,
           active: family === id,
         }))
       : oilGasFilterIds.map((id) => ({
           id,
           label: oilGasFilterLabels[id],
-          href: solutionsHref(tab, id, sheet, q),
-          count: applyOilGasFilters(id, sheet, q, oilGasProducts).length,
+          href: solutionsHref(tab, id, q),
+          count: applyOilGasFilters(id, q, oilGasProducts).length,
           active: family === id,
         }));
-  const sheetOptions = sheetFilterIds.map((id) => ({
-    id,
-    label: sheetFilterLabels[id],
-    href: solutionsHref(tab, family, id, q),
-    count:
-      tab === "industrial"
-        ? applyIndustrialFilters(family as IndustrialFilter, id, q, industrialFamilies, products)
-            .length
-        : applyOilGasFilters(family as OilGasFilter, id, q, oilGasProducts).length,
-    active: sheet === id,
-  }));
-  const activeCount = Number(family !== "all") + Number(sheet !== "all");
-  const clearHref = solutionsHref(tab, "all", "all", q);
+  const activeCount: Number(family !== "all");
+  const clearHref = solutionsHref(tab, "all", q);
 
   return (
     <div>
@@ -91,11 +71,11 @@ export function SolutionsExplorer({
             [
               ["industrial", "Industrial"],
               ["oil-gas", "Oil & Gas"],
-            ] as const
+            ] = const
           ).map(([id, label]) => (
             <Link
               key={id}
-              href={solutionsHref(id, "all", sheet, q)}
+              href={solutionsHref(id, "all", q)}
               scroll={false}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
@@ -111,7 +91,6 @@ export function SolutionsExplorer({
         <div className="flex w-full items-center gap-2 sm:max-w-md">
           <form action={tab === "industrial" ? "/industrial" : "/oil-gas"} className="relative min-w-0 flex-1">
             {family !== "all" && <input type="hidden" name="familia" value={family} />}
-            {sheet !== "all" && <input type="hidden" name="ficha" value={sheet} />}
             <label className="block">
               <span className="sr-only">Buscar soluciones</span>
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -131,7 +110,6 @@ export function SolutionsExplorer({
           </form>
           <SolutionsFilters
             familyOptions={familyOptions}
-            sheetOptions={sheetOptions}
             clearHref={clearHref}
             activeCount={activeCount}
           />
@@ -146,12 +124,6 @@ export function SolutionsExplorer({
           ? "Soluciones industriales formuladas desde la operación."
           : "Soluciones químicas para condiciones exigentes de Oil & Gas."}
       </h1>
-      {tab === "oil-gas" && (
-        <p className="mt-4 max-w-2xl text-muted-foreground">
-          Cada referencia tiene ficha propia. Donde hay documentación de producto se
-          publica; el resto queda pendiente de ficha técnica.
-        </p>
-      )}
       <p className="mt-4 text-sm text-muted-foreground">
         {items.length}{" "}
         {tab === "industrial"
@@ -178,11 +150,11 @@ export function SolutionsExplorer({
             No hay resultados en {tab === "industrial" ? "Industrial" : "Oil & Gas"}.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Prueba otra familia, quita el filtro de ficha o cambia el texto de búsqueda.
+            Prueba otra familia oc cambia el texto de busqueda.
           </p>
           {otherCount > 0 && (
             <Link
-              href={solutionsHref(tab === "industrial" ? "oil-gas" : "industrial", "all", sheet, q)}
+              href={solutionsHref(tab === "industrial" ? "oil-gas" : "industrial", "all", q)}
               className="mt-3 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline"
             >
               Ver {otherCount} coincidencia{otherCount === 1 ? "" : "s"} en{" "}
@@ -200,7 +172,7 @@ export function SolutionsExplorer({
               alt={f.product}
               lead={f.facts[0]}
               title={f.product}
-              subtitle={f.name === f.product ? undefined : f.name}
+              subtitle={f.name}
               facts={f.facts.slice(1)}
             />
           ))}
@@ -215,14 +187,7 @@ export function SolutionsExplorer({
               alt={p.name}
               title={p.name}
               subtitle={p.type}
-              facts={[
-                p.short,
-                ...(p.datasheet
-                  ? ["Ficha técnica descargable"]
-                  : p.pendingTechnical
-                    ? ["Ficha técnica pendiente"]
-                    : []),
-              ]}
+              facts={[p.short, "Ficha técnica descargable"]}
             />
           ))}
         </div>
@@ -235,31 +200,4 @@ export function SolutionsExplorer({
           </CtaLink>
         )}
         <CtaLink href="/configurador" variant="gold">
-          {tab === "industrial" ? "Describir mi operación" : "Describir condiciones de pozo o planta"}
-        </CtaLink>
-      </div>
-    </div>
-  );
-}
-
-export function solutionsFromSearchParams(
-  tab: Tab,
-  searchParams: { familia?: string | string[]; ficha?: string | string[]; q?: string | string[] }
-) {
-  const sheet = parseSheetFilter(searchParams.ficha);
-  const q = parseQuery(searchParams.q);
-  if (tab === "industrial") {
-    return {
-      tab,
-      family: parseIndustrialFilter(searchParams.familia),
-      sheet,
-      q,
-    };
-  }
-  return {
-    tab,
-    family: parseOilGasFilter(searchParams.familia),
-    sheet,
-    q,
-  };
-}
+          {tab === "industrial" ? "Describir mi operación" : "Describir condiciones de pozo o
