@@ -1,16 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ListFilter } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
 export type FilterChoice = {
@@ -24,7 +17,7 @@ export type FilterChoice = {
 export function SolutionsFilters({
   familyOptions,
   sheetOptions,
-  clearHref,
+  clearHref}
   activeCount,
 }: {
   familyOptions: FilterChoice[];
@@ -33,16 +26,46 @@ export function SolutionsFilters({
   activeCount: number;
 }) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    function onDocClick(e: MouseEvent) {
+      const t = e.target as Node;
+      if (triggerRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    const id = window.setTimeout(() => {
+      document.addEventListener("click", onDocClick);
+    }, 0);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      window.clearTimeout(id);
+      document.removeEventListener("click", onDocClick);
+    };
+  }, [open]);
 
   return (
-    <Popover open={open} onOpenChange={(next) => setOpen(next)}>
-      <PopoverTrigger
+    <div className="relative shrink-0">
+      <button
+        ref={triggerRef}
+        type="button"
         aria-label="Filtros"
         title="Filtros"
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-haspopup="dialog"
+        onClick={() => setOpen((v) => !v)}
         className={cn(
           buttonVariants({ variant: "outline", size: "icon-lg" }),
-          "relative size-11 shrink-0 rounded-2xl border-border bg-white text-ink shadow-none",
-          activeCount > 0 && "border-gold/60 bg-accent"
+          "relative size-11 rounded-2xl border-border bg-white text-ink shadow-none",
+          (open || activeCount > 0) && "border-gold/60 bg-accent"
         )}
       >
         <ListFilter className="size-5" />
@@ -51,36 +74,40 @@ export function SolutionsFilters({
             {activeCount}
           </span>
         )}
-      </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        sideOffset={8}
-        className="w-80 max-h-[min(28rem,70vh)] gap-0 overflow-y-auto rounded-2xl p-0"
-      >
-        <PopoverHeader className="sticky top-0 z-10 flex flex-row items-center justify-between gap-3 border-b border-border bg-popover px-4 py-3">
-          <PopoverTitle className="text-base font-semibold text-ink">Filtros</PopoverTitle>
-          <Link
-            href={clearHref}
-            scroll={false}
-            onClick={() => setOpen(false)}
-            className="text-sm font-medium text-muted-foreground hover:text-gold"
-          >
-            Limpiar filtros
-          </Link>
-        </PopoverHeader>
-        <FilterGroup
-          title="Familia"
-          options={familyOptions}
-          onPick={() => setOpen(false)}
-        />
-        <FilterGroup
-          title="Ficha técnica"
-          options={sheetOptions}
-          onPick={() => setOpen(false)}
-          className="border-t border-border"
-        />
-      </PopoverContent>
-    </Popover>
+      </button>
+      {open && (
+        <div
+          ref={menuRef}
+          id={menuId}
+          role="dialog"
+          aria-label="Filtros"
+          className="absolute right-0 top-[calc(100%+8px)] z-[100] flex w-[min(20rem,calc(100vw-2rem))] max-h-[min(28rem,70vh)] flex-col overflow-y-auto rounded-2xl bg-white shadow-[0_18px_40px_-24px_rgba(28,36,24,0.55)] ring-1 ring-foreground/10"
+        >
+          <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-white px-4 py-3">
+            <p className="text-base font-semibold text-ink">Filtros</p>
+            <Link
+              href={clearHref}
+              scroll={false}
+              onClick={() => setOpen(false)}
+              className="text-sm font-medium text-muted-foreground hover:text-gold"
+            >
+              Limpiar filtros
+            </Link>
+          </div>
+          <FilterGroup
+            title="Familia"
+            options={familyOptions}
+            onPick={() => setOpen(false)}
+          />
+          <FilterGroup
+            title="Ficha técnica"
+            options={sheetOptions}
+            onPick={() => setOpen(false)}
+            className="border-t border-border"
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -96,7 +123,7 @@ function FilterGroup({
   className?: string;
 }) {
   return (
-    <div className={cn("px-2 py-2", className)}>
+    <div className={cn("px-2 pi-2", className)}>
       <p className="px-2 pb-1.5 text-[11px] font-semibold tracking-[0.18em] text-gold uppercase">
         {title}
       </p>
