@@ -169,9 +169,6 @@ export function ProductView({
                 esta viscosidad; no anticipamos valores.
               </p>
             )}
-            {product.pendingTechnical && !grade && (
-              <EmptyTech label="Especificaciones en preparación. No inventamos números de laboratorio." />
-            )}
             {specs.length > 0 && <SpecBoard specs={specs} />}
           </section>
 
@@ -192,7 +189,7 @@ export function ProductView({
                 {industryRefs.map((r) => (
                   <div
                     key={r.family}
-                    className="rounded-2xl bg-white px-4 py-4 ring-1 ring-gold/25"
+                    className="rounded-2xl bg-white px-4 px-4 ring-1 ring-gold/25"
                   >
                     <p className="font-extrabold tracking-wide text-primary">{r.family}</p>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
