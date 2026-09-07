@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { CatalogCard } from "@/components/product/catalog-card";
+import { SolutionsFilters } from "@/components/product/solutions-filters";
 import { CtaLink } from "@/components/site/cta";
 import {
   applyIndustrialFilters,
@@ -24,24 +25,6 @@ import { industrialFamilies, oilGasProducts, products } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 type Tab = "industrial" | "oil-gas";
-
-function Chip({ href, active, children }: { href: string; active: boolean; children: string }) {
-  return (
-    <Link
-      href={href}
-      scroll={false}
-      aria-current={active ? "page" : undefined}
-      className={cn(
-        "shrink-0 rounded-full px-3.5 py-1.5 text-sm font-semibold transition",
-        active
-          ? "bg-primary text-primary-foreground shadow-sm"
-          : "bg-white text-ink/70 ring-1 ring-foreground/10 hover:text-ink hover:ring-gold/50"
-      )}
-    >
-      {children}
-    </Link>
-  );
-}
 
 export function SolutionsExplorer({
   tab,
@@ -70,18 +53,35 @@ export function SolutionsExplorer({
   const items = tab === "industrial" ? industrial : oilgas;
   const otherCount = tab === "industrial" ? oilgas.length : industrial.length;
   const filtersOn = family !== "all" || sheet !== "all" || q.length > 0;
-  const familyChips =
+  const familyOptions =
     tab === "industrial"
       ? industrialFilterIds.map((id) => ({
           id,
           label: industrialFilterLabels[id],
           href: solutionsHref(tab, id, sheet, q),
+          count: applyIndustrialFilters(id, sheet, q, industrialFamilies, products).length,
+          active: family === id,
         }))
       : oilGasFilterIds.map((id) => ({
           id,
           label: oilGasFilterLabels[id],
           href: solutionsHref(tab, id, sheet, q),
+          count: applyOilGasFilters(id, sheet, q, oilGasProducts).length,
+          active: family === id,
         }));
+  const sheetOptions = sheetFilterIds.map((id) => ({
+    id,
+    label: sheetFilterLabels[id],
+    href: solutionsHref(tab, family, id, q),
+    count:
+      tab === "industrial"
+        ? applyIndustrialFilters(family as IndustrialFilter, id, q, industrialFamilies, products)
+            .length
+        : applyOilGasFilters(family as OilGasFilter, id, q, oilGasProducts).length,
+    active: sheet === id,
+  }));
+  const activeCount = Number(family !== "all") + Number(sheet !== "all");
+  const clearHref = solutionsHref(tab, "all", "all", q);
 
   return (
     <div>
@@ -108,46 +108,33 @@ export function SolutionsExplorer({
             </Link>
           ))}
         </div>
-        <form action={tab === "industrial" ? "/industrial" : "/oil-gas"} className="relative w-full sm:max-w-sm">
-          {family !== "all" && <input type="hidden" name="familia" value={family} />}
-          {sheet !== "all" && <input type="hidden" name="ficha" value={sheet} />}
-          <label className="block">
-            <span className="sr-only">Buscar soluciones</span>
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="Buscar referencia, familia o uso"
-              className="h-11 w-full rounded-full border border-border bg-white pl-10 pr-12 text-sm outline-none ring-gold/40 placeholder:text-muted-foreground focus:ring-2"
-            />
-          </label>
-          <button
-            type="submit"
-            className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
-          >
-            Buscar
-          </button>
-        </form>
-      </div>
-
-      <div className="mt-4 space-y-3">
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-          {familyChips.map((chip) => (
-            <Chip key={chip.id} href={chip.href} active={family === chip.id}>
-              {chip.label}
-            </Chip>
-          ))}
-        </div>
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
-          {sheetFilterIds.map((id) => (
-            <Chip
-              key={id}
-              href={solutionsHref(tab, family, id, q)}
-              active={sheet === id}
+        <div className="flex w-full items-center gap-2 sm:max-w-md">
+          <form action={tab === "industrial" ? "/industrial" : "/oil-gas"} className="relative min-w-0 flex-1">
+            {family !== "all" && <input type="hidden" name="familia" value={family} />}
+            {sheet !== "all" && <input type="hidden" name="ficha" value={sheet} />}
+            <label className="block">
+              <span className="sr-only">Buscar soluciones</span>
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <input
+                name="q"
+                defaultValue={q}
+                placeholder="Buscar referencia, familia o uso"
+                className="h-11 w-full rounded-full border border-border bg-white pl-10 pr-12 text-sm outline-none ring-gold/40 placeholder:text-muted-foreground focus:ring-2"
+              />
+            </label>
+            <button
+              type="submit"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
             >
-              {sheetFilterLabels[id]}
-            </Chip>
-          ))}
+              Buscar
+            </button>
+          </form>
+          <SolutionsFilters
+            familyOptions={familyOptions}
+            sheetOptions={sheetOptions}
+            clearHref={clearHref}
+            activeCount={activeCount}
+          />
         </div>
       </div>
 
