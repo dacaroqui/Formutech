@@ -60,7 +60,7 @@ export function SolutionsExplorer({
           count: applyOilGasFilters(id, q, oilGasProducts).length,
           active: family === id,
         }));
-  const activeCount: Number(family !== "all");
+  const activeCount = Number(family !== "all");
   const clearHref = solutionsHref(tab, "all", q);
 
   return (
@@ -71,7 +71,7 @@ export function SolutionsExplorer({
             [
               ["industrial", "Industrial"],
               ["oil-gas", "Oil & Gas"],
-            ] = const
+            ] as const
           ).map(([id, label]) => (
             <Link
               key={id}
@@ -150,7 +150,7 @@ export function SolutionsExplorer({
             No hay resultados en {tab === "industrial" ? "Industrial" : "Oil & Gas"}.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Prueba otra familia oc cambia el texto de busqueda.
+            Prueba otra familia o cambia el texto de búsqueda.
           </p>
           {otherCount > 0 && (
             <Link
@@ -200,4 +200,28 @@ export function SolutionsExplorer({
           </CtaLink>
         )}
         <CtaLink href="/configurador" variant="gold">
-          {tab === "industrial" ? "Describir mi operación" : "Describir condiciones de pozo o
+          {tab === "industrial" ? "Describir mi operación" : "Describir condiciones de pozo o planta"}
+        </CtaLink>
+      </div>
+    </div>
+  );
+}
+
+export function solutionsFromSearchParams(
+  tab: Tab,
+  searchParams: { familia?: string | string[]; q?: string | string[] }
+) {
+  const q = parseQuery(searchParams.q);
+  if (tab === "industrial") {
+    return {
+      tab,
+      family: parseIndustrialFilter(searchParams.familia),
+      q,
+    };
+  }
+  return {
+    tab,
+    family: parseOilGasFilter(searchParams.familia),
+    q,
+  };
+}
