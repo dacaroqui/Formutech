@@ -106,7 +106,7 @@ export function applyIndustrialFilters<
     product: string;
     name: string;
     href: string;
-    phrase: strinc{
+    phrase: string;
     facts: readonly string[];
   },
 >(family: IndustrialFilter, q: string, families: readonly T[]): T[] {
