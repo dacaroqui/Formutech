@@ -33,10 +33,11 @@ for (const p of allProducts) {
   assert.ok(p.applications.length > 0, p.slug);
   assert.ok(existsSync(`public${p.image}`), p.image);
   if (p.pending) {
-    assert.equal(p.datasheet, undefined, p.slug);
+    assert.ok(p.datasheet?.endsWith(".pdf"), p.slug);
+    assert.ok(existsSync(`public${p.datasheet}`), p.datasheet);
     assert.equal(p.specs.length, 0, p.slug);
     assert.equal(p.presentations.length, 0, p.slug);
-    assert.ok(!/ficha|pdf|certific/i.test(p.seoDescription), p.slug);
+    assert.ok(!/certific/i.test(p.seoDescription), p.slug);
     continue;
   }
   assert.ok(p.datasheet?.endsWith(".pdf"), p.slug);
@@ -98,19 +99,24 @@ assert.equal(oilGasFamilyFilter("formu-silcol"), "commodities");
 assert.equal(oilGasFamilyFilter("formu-caco3"), "commodities");
 for (const p of oilGasProducts) oilGasFamilyFilter(p.slug);
 
-const pendingSlugs = [
-  "formu-emul-dual",
-  "formu-redvis",
-  "sec-h2s",
-  "formu-phpa",
-  "formu-pac-lv",
-  "formu-silcol",
-  "formu-caco3",
+const pendingSheets: [string, string][] = [
+  ["formu-emul-dual", "/fichas/formu-emul-dual.pdf"],
+  ["formu-redvis", "/fichas/formu-redvis.pdf"],
+  ["sec-h2s", "/fichas/sec-h2s.pdf"],
+  ["formu-phpa", "/fichas/formu-phpa.pdf"],
+  ["formu-pac-lv", "/fichas/formu-pac-lv.pdf"],
+  ["formu-silcol", "/fichas/formu-silcol.pdf"],
+  ["formu-caco3", "/fichas/formu-caco3.pdf"],
 ];
 assert.deepEqual(
   oilGasProducts.filter((p) => p.pending).map((p) => p.slug),
-  pendingSlugs,
+  pendingSheets.map(([slug]) => slug),
 );
+for (const [slug, sheet] of pendingSheets) {
+  const p = oilGasProducts.find((x) => x.slug === slug)!;
+  assert.equal(p.datasheet, sheet, slug);
+  assert.equal(p.specs.length, 0, slug);
+}
 
 const isoOnly = applyIndustrialFilters("hidraulico", "", industrialFamilies);
 assert.equal(isoOnly.length, 1);

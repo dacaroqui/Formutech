@@ -207,7 +207,13 @@ export function ProductView({
           <section id="documentacion">
             <FichaHead title="Presentaciones y documentación" icon={Package} />
             {product.presentations.length === 0 ? (
-              <EmptyTech label="Presentaciones se publicarán con la ficha de producto." />
+              <EmptyTech
+                label={
+                  product.datasheet
+                    ? "La presentación se confirma con un asesor técnico."
+                    : "Presentaciones se publicarán con la ficha de producto."
+                }
+              />
             ) : (
               <PackGrid items={product.presentations} />
             )}

@@ -912,6 +912,7 @@ export const oilGasProducts: Product[] = [
     applications: ["Fluidos OBM", "Control de estabilidad", "Desempeño del sistema"],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-emul-dual.pdf",
     pending: true,
     seoTitle: "Formu Emul-Dual | Emulsificante dual para fluidos OBM",
     seoDescription:
@@ -938,6 +939,7 @@ export const oilGasProducts: Product[] = [
     applications: ["Crudos pesados", "Crudos extrapesados", "Transporte y manejo"],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-redvis.pdf",
     pending: true,
     seoTitle: "Formu RedVis | Reductor de viscosidad para crudos",
     seoDescription:
@@ -964,6 +966,7 @@ export const oilGasProducts: Product[] = [
     applications: ["Sistemas de gas", "Crudo", "Agua de proceso"],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/sec-h2s.pdf",
     pending: true,
     seoTitle: "Sec H₂S | Secuestrante de sulfuro de hidrógeno",
     seoDescription:
@@ -994,6 +997,7 @@ export const oilGasProducts: Product[] = [
     ],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-phpa.pdf",
     pending: true,
     seoTitle: "Formu PHPA en polvo | Polímero encapsulante",
     seoDescription:
@@ -1020,6 +1024,7 @@ export const oilGasProducts: Product[] = [
     applications: ["Fluidos base agua (WBM)", "Control de filtrado", "Desempeño del sistema"],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-pac-lv.pdf",
     pending: true,
     seoTitle: "Formu PAC LV | Controlador de filtrado de baja viscosidad",
     seoDescription:
@@ -1046,6 +1051,7 @@ export const oilGasProducts: Product[] = [
     applications: ["Cementación", "Aplicaciones especiales"],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-silcol.pdf",
     pending: true,
     seoTitle: "Formu SILCOL | Sílice coloidal para aplicaciones especiales",
     seoDescription:
@@ -1076,6 +1082,7 @@ export const oilGasProducts: Product[] = [
     ],
     specs: [],
     presentations: [],
+    datasheet: "/fichas/formu-caco3.pdf",
     pending: true,
     seoTitle: "Formu CaCO₃ | Agente de puenteo y material obturante",
     seoDescription:
