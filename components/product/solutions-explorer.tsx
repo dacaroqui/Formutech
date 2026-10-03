@@ -187,7 +187,9 @@ export function SolutionsExplorer({
               alt={p.name}
               title={p.name}
               subtitle={p.type}
-              facts={[p.short, "Ficha técnica descargable"]}
+              facts={
+                p.datasheet ? [p.short, "Ficha técnica descargable"] : [p.short]
+              }
             />
           ))}
         </div>

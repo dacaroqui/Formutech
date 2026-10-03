@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -11,11 +11,16 @@ const items = [
   { id: "documentacion", label: "Documentación" },
 ];
 
-export function ProductNav() {
+export function ProductNav({ omit = [] }: { omit?: readonly string[] }) {
+  const omitKey = omit.join(",");
+  const visible = useMemo(() => {
+    const hidden = new Set(omitKey ? omitKey.split(",") : []);
+    return items.filter((item) => !hidden.has(item.id));
+  }, [omitKey]);
   const [active, setActive] = useState("resumen");
 
   useEffect(() => {
-    const els = items
+    const els = visible
       .map((i) => document.getElementById(i.id))
       .filter((n): n is HTMLElement => Boolean(n));
     const io = new IntersectionObserver(
@@ -27,12 +32,12 @@ export function ProductNav() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [visible]);
 
   return (
     <div className="lg:sticky lg:top-24 lg:self-start">
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-3 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0">
-        {items.map((item) => (
+        {visible.map((item) => (
           <a
             key={item.id}
             href={`#${item.id}`}

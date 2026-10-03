@@ -30,6 +30,8 @@ export type Product = {
   specs: SpecRow[];
   presentations: string[];
   datasheet?: string;
+  /** Sin ficha ni especificaciones de laboratorio publicadas. */
+  pending?: boolean;
   grades?: Grade[];
   note?: string;
   colors?: string[];
@@ -888,6 +890,196 @@ export const oilGasProducts: Product[] = [
     seoTitle: "Formu-OXY | Secuestrante de oxígeno para fluidos",
     seoDescription:
       "Formu-OXY: secuestrante de oxígeno FormuTech para fluidos de perforación y de proceso. Ficha técnica descargable.",
+  },
+  {
+    slug: "formu-emul-dual",
+    href: "/oil-gas/formu-emul-dual",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu Emul-Dual",
+    type: "Emulsificante dual para fluidos OBM",
+    short: "Emulsiones estables en fluidos de perforación OBM.",
+    image: "/products/formu-emul-dual.jpg",
+    solves:
+      "Diseñado para mantener la estabilidad de la emulsión y un desempeño confiable del fluido en condiciones exigentes.",
+    benefits: [
+      "Favorece emulsiones estables",
+      "Ayuda a controlar la humedad y la estabilidad del sistema",
+      "Contribuye al desempeño del fluido",
+    ],
+    applications: ["Fluidos OBM", "Control de estabilidad", "Desempeño del sistema"],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu Emul-Dual | Emulsificante dual para fluidos OBM",
+    seoDescription:
+      "Formu Emul-Dual mantiene la estabilidad de la emulsión y el desempeño del fluido OBM en condiciones exigentes.",
+  },
+  {
+    slug: "formu-redvis",
+    href: "/oil-gas/formu-redvis",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu RedVis",
+    type: "Reductor de viscosidad para crudos",
+    short: "Mejora la fluidez y el manejo de crudos pesados y extrapesados.",
+    image: "/products/formu-redvis.jpg",
+    solves:
+      "Ayuda a mejorar la fluidez y facilitar el manejo de crudos pesados y extrapesados.",
+    benefits: [
+      "Disminuye la viscosidad aparente",
+      "Facilita el bombeo y manejo del crudo",
+      "Mejora la movilidad del sistema",
+    ],
+    applications: ["Crudos pesados", "Crudos extrapesados", "Transporte y manejo"],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu RedVis | Reductor de viscosidad para crudos",
+    seoDescription:
+      "Formu RedVis disminuye la viscosidad aparente y facilita el bombeo de crudos pesados y extrapesados.",
+  },
+  {
+    slug: "sec-h2s",
+    href: "/oil-gas/sec-h2s",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Sec H₂S",
+    type: "Secuestrante para sulfuro de hidrógeno (Formu-SEC H₂S)",
+    short: "Reduce H₂S en sistemas de gas, crudo y agua.",
+    image: "/products/sec-h2s.jpg",
+    solves:
+      "Formu-SEC H₂S contribuye a reducir la presencia de H₂S y mejorar la seguridad en sistemas de gas, crudo y agua.",
+    benefits: [
+      "Reduce H₂S en el sistema",
+      "Mejora la seguridad operativa",
+      "Protege equipos y ayuda al cumplimiento",
+    ],
+    applications: ["Sistemas de gas", "Crudo", "Agua de proceso"],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Sec H₂S | Secuestrante de sulfuro de hidrógeno",
+    seoDescription:
+      "Sec H₂S (Formu-SEC H₂S) reduce el sulfuro de hidrógeno en sistemas de gas, crudo y agua, y mejora la seguridad operativa.",
+  },
+  {
+    slug: "formu-phpa",
+    href: "/oil-gas/formu-phpa",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu PHPA en polvo",
+    type: "Polímero encapsulante",
+    short: "Estabiliza arcillas y mantiene la integridad del pozo.",
+    image: "/products/formu-phpa.jpg",
+    solves:
+      "Solución efectiva para estabilizar arcillas y mantener la integridad del pozo en condiciones desafiantes.",
+    benefits: [
+      "Encapsula arcillas y recortes, evitando su hidratación y dispersión",
+      "Mejora la estabilidad del pozo, manteniendo las paredes firmes",
+      "Favorece el transporte y control del sistema, optimizando la reología del fluido",
+    ],
+    applications: [
+      "Fluidos base agua (WBM)",
+      "Estabilización de arcillas",
+      "Control de sólidos",
+    ],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu PHPA en polvo | Polímero encapsulante",
+    seoDescription:
+      "Formu PHPA en polvo encapsula arcillas y recortes, estabiliza el pozo y favorece el control reológico en fluidos base agua.",
+  },
+  {
+    slug: "formu-pac-lv",
+    href: "/oil-gas/formu-pac-lv",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu PAC LV",
+    type: "Controlador de filtrado (low viscosity)",
+    short: "Celulosa polianiónica de baja viscosidad para control de filtrado.",
+    image: "/products/formu-pac-lv.jpg",
+    solves:
+      "Celulosa polianiónica de baja viscosidad para un control de filtrado eficiente y un desempeño estable del fluido.",
+    benefits: [
+      "Reduce el filtrado API, minimizando la pérdida de fluido",
+      "Favorece un revoque delgado y estable, formando una película resistente",
+      "Apoya la integridad del pozo, contribuyendo a una perforación más segura",
+    ],
+    applications: ["Fluidos base agua (WBM)", "Control de filtrado", "Desempeño del sistema"],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu PAC LV | Controlador de filtrado de baja viscosidad",
+    seoDescription:
+      "Formu PAC LV es celulosa polianiónica de baja viscosidad para reducir el filtrado y favorecer un revoque delgado en fluidos base agua.",
+  },
+  {
+    slug: "formu-silcol",
+    href: "/oil-gas/formu-silcol",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu SILCOL",
+    type: "Sílice coloidal para aplicaciones especiales",
+    short: "Estabilidad y sellado fino en cementación y formulaciones especiales.",
+    image: "/products/formu-silcol.jpg",
+    solves:
+      "Sílice coloidal para aplicaciones especiales. Apoya la estabilidad y el sellado fino, favorece el control del sistema y es útil en formulaciones especiales.",
+    benefits: [
+      "Apoya la estabilidad y el sellado fino",
+      "Favorece el control del sistema",
+      "Útil en formulaciones especiales",
+    ],
+    applications: ["Cementación", "Aplicaciones especiales"],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu SILCOL | Sílice coloidal para aplicaciones especiales",
+    seoDescription:
+      "Formu SILCOL es sílice coloidal para cementación y aplicaciones especiales: estabilidad, sellado fino y control del sistema.",
+  },
+  {
+    slug: "formu-caco3",
+    href: "/oil-gas/formu-caco3",
+    sector: "oil-gas",
+    family: "Oil & Gas",
+    familyHref: "/oil-gas",
+    category: "Oil & Gas",
+    name: "Formu CaCO₃",
+    type: "Agente de puenteo y material obturante",
+    short: "Carbonato de calcio para control de pérdidas y sellado temporal.",
+    image: "/products/formu-caco3.jpg",
+    solves:
+      "Carbonato de calcio de alta pureza para control de pérdidas y sellado temporal de zonas permeables.",
+    benefits: [
+      "Apoya el control de pérdidas, sellando poros, fracturas y zonas de alta permeabilidad",
+      "Ofrece un puenteo temporal, formando un lecho estable y resistente",
+      "Disponible en diferentes granulometrías, adaptándose a cada condición y requerimiento",
+    ],
+    applications: [
+      "Fluidos base agua (WBM)",
+      "Control de pérdidas (lost circulation)",
+      "Cementación",
+    ],
+    specs: [],
+    presentations: [],
+    pending: true,
+    seoTitle: "Formu CaCO₃ | Agente de puenteo y material obturante",
+    seoDescription:
+      "Formu CaCO₃ es carbonato de calcio para control de pérdidas, puenteo temporal y cementación, en distintas granulometrías.",
   },
 ];
 

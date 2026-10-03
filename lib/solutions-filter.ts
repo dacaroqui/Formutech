@@ -17,6 +17,7 @@ export const oilGasFilterIds = [
   "lubricantes",
   "obm",
   "tratamiento",
+  "commodities",
 ] as const;
 
 export type OilGasFilter = (typeof oilGasFilterIds)[number];
@@ -38,6 +39,7 @@ export const oilGasFilterLabels: Record<OilGasFilter, string> = {
   lubricantes: "Lubricantes WBM",
   obm: "OBM",
   tratamiento: "Tratamiento de fluido",
+  commodities: "Commodities",
 };
 
 export function industrialFamilyFilter(href: string): Exclude<IndustrialFilter, "all"> {
@@ -50,7 +52,19 @@ export function industrialFamilyFilter(href: string): Exclude<IndustrialFilter, 
   throw new Error(`familia industrial sin filtro: ${href}`);
 }
 
+const brochureOilGasFilters: Record<string, Exclude<OilGasFilter, "all">> = {
+  "formu-emul-dual": "obm",
+  "formu-redvis": "tratamiento",
+  "sec-h2s": "tratamiento",
+  "formu-phpa": "commodities",
+  "formu-pac-lv": "commodities",
+  "formu-silcol": "commodities",
+  "formu-caco3": "commodities",
+};
+
 export function oilGasFamilyFilter(slug: string): Exclude<OilGasFilter, "all"> {
+  const brochure = brochureOilGasFilters[slug];
+  if (brochure) return brochure;
   if (slug.includes("inhibidor")) return "inhibidores";
   if (slug.includes("rop")) return "rop";
   if (slug.includes("lubricante")) return "lubricantes";

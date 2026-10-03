@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import {
   allProducts,
   hydraulicGrades,
@@ -19,7 +20,7 @@ const hrefs = new Set([
 ]);
 
 assert.equal(industrialFamilies.length, 8);
-assert.equal(oilGasProducts.length, 10);
+assert.equal(oilGasProducts.length, 17);
 assert.ok(hrefs.has("/industrial/aceite-hidraulico"));
 assert.ok(hrefs.has("/industrial/formulub-iso-46"));
 assert.ok(hrefs.has("/industrial/formulub-sol-ssynt"));
@@ -29,9 +30,17 @@ for (const p of allProducts) {
   assert.ok(p.name.length > 2, p.slug);
   assert.ok(p.solves.length > 20, p.slug);
   assert.ok(p.seoTitle && p.seoDescription, p.slug);
+  assert.ok(p.applications.length > 0, p.slug);
+  assert.ok(existsSync(`public${p.image}`), p.image);
+  if (p.pending) {
+    assert.equal(p.datasheet, undefined, p.slug);
+    assert.equal(p.specs.length, 0, p.slug);
+    assert.equal(p.presentations.length, 0, p.slug);
+    assert.ok(!/ficha|pdf|certific/i.test(p.seoDescription), p.slug);
+    continue;
+  }
   assert.ok(p.datasheet?.endsWith(".pdf"), p.slug);
   assert.ok(p.specs.length >= 4, p.slug);
-  assert.ok(p.applications.length > 0, p.slug);
 }
 
 const iso = allProducts.find((p) => p.slug === "aceite-hidraulico")!;
@@ -80,7 +89,28 @@ for (const f of industrialFamilies) industrialFamilyFilter(f.href);
 assert.equal(oilGasFamilyFilter("inhibidor-arcilla-amina"), "inhibidores");
 assert.equal(oilGasFamilyFilter("nanoinhibidor-arcilla"), "inhibidores");
 assert.equal(oilGasFamilyFilter("secuestrante-oxigeno"), "tratamiento");
+assert.equal(oilGasFamilyFilter("formu-emul-dual"), "obm");
+assert.equal(oilGasFamilyFilter("formu-redvis"), "tratamiento");
+assert.equal(oilGasFamilyFilter("sec-h2s"), "tratamiento");
+assert.equal(oilGasFamilyFilter("formu-phpa"), "commodities");
+assert.equal(oilGasFamilyFilter("formu-pac-lv"), "commodities");
+assert.equal(oilGasFamilyFilter("formu-silcol"), "commodities");
+assert.equal(oilGasFamilyFilter("formu-caco3"), "commodities");
 for (const p of oilGasProducts) oilGasFamilyFilter(p.slug);
+
+const pendingSlugs = [
+  "formu-emul-dual",
+  "formu-redvis",
+  "sec-h2s",
+  "formu-phpa",
+  "formu-pac-lv",
+  "formu-silcol",
+  "formu-caco3",
+];
+assert.deepEqual(
+  oilGasProducts.filter((p) => p.pending).map((p) => p.slug),
+  pendingSlugs,
+);
 
 const isoOnly = applyIndustrialFilters("hidraulico", "", industrialFamilies);
 assert.equal(isoOnly.length, 1);
@@ -91,6 +121,9 @@ assert.equal(applyIndustrialFilters("all", "arcilla", industrialFamilies).length
 const inhib = applyOilGasFilters("inhibidores", "", oilGasProducts);
 assert.equal(inhib.length, 3);
 assert.ok(inhib.every((p) => p.slug.includes("inhibidor")));
+assert.equal(applyOilGasFilters("obm", "", oilGasProducts).length, 2);
+assert.equal(applyOilGasFilters("tratamiento", "", oilGasProducts).length, 5);
+assert.equal(applyOilGasFilters("commodities", "", oilGasProducts).length, 4);
 assert.ok(applyOilGasFilters("all", "arcilla", oilGasProducts).length >= 3);
 
 console.log("ok", allProducts.length, "products", hrefs.size, "hrefs");

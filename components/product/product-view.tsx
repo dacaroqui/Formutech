@@ -41,6 +41,7 @@ export function ProductView({
   grade?: Grade;
 }) {
   const specs = grade?.pending ? [] : grade?.specs?.length ? grade.specs : product.specs;
+  const showSpecs = specs.length > 0 || Boolean(grade?.pending);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -107,7 +108,7 @@ export function ProductView({
       </div>
 
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[200px_1fr]">
-        <ProductNav />
+        <ProductNav omit={showSpecs ? [] : ["especificaciones"]} />
         <div className="space-y-16">
           {product.grades && (
             <section>
@@ -161,16 +162,18 @@ export function ProductView({
             )}
           </section>
 
-          <section id="especificaciones">
-            <FichaHead title="Datos técnicos" icon={ClipboardList} />
-            {grade?.pending && (
-              <p className="mt-3 text-sm text-muted-foreground">
-                La referencia {grade.label} está prevista. Solicite la ficha técnica de
-                esta viscosidad; no anticipamos valores.
-              </p>
-            )}
-            {specs.length > 0 && <SpecBoard specs={specs} />}
-          </section>
+          {showSpecs && (
+            <section id="especificaciones">
+              <FichaHead title="Datos técnicos" icon={ClipboardList} />
+              {grade?.pending && (
+                <p className="mt-3 text-sm text-muted-foreground">
+                  La referencia {grade.label} está prevista. Solicite la ficha técnica de
+                  esta viscosidad; no anticipamos valores.
+                </p>
+              )}
+              {specs.length > 0 && <SpecBoard specs={specs} />}
+            </section>
+          )}
 
           {product.slug === "aceite-hidraulico" && (
             <section className="relative overflow-hidden rounded-[28px] border border-border bg-muted/50 p-6 md:p-8">

@@ -109,7 +109,7 @@ export default function HomePage() {
             alt="Laboratorio de fluidos e infraestructura energética"
             lead="Oil & Gas"
             title="Fluidos de Perforación"
-            facts={["10 especialidades · inhibidores · ROP · WBM · OBM · antiespumantes · biocidas"]}
+            facts={["17 especialidades · inhibidores · ROP · WBM · OBM · tratamiento · commodities"]}
             aspect="aspect-[16/9] lg:aspect-[2.15/1]"
             sizes="(min-width: 1024px) 50vw, 100vw"
           />

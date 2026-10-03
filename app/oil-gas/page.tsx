@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Oil & Gas · especialidades químicas",
   description:
-    "Formulación y especialidades para fluidos de perforación. Fichas de Formu-Clay, Formu-PolyClay, Formu-NanoClay, Formu-ROP, Formu-LUB, Formu-ASF, Formu-Foam, Formu-BIO y Formu-OXY.",
+    "Especialidades para fluidos de perforación y tratamiento: inhibidores, ROP, lubricantes, OBM, tratamiento de fluido y commodities (Emul-Dual, RedVis, Sec H₂S, PHPA, PAC LV, SILCOL y CaCO₃).",
 };
 
 export default async function OilGasPage({
