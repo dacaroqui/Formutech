@@ -41,6 +41,7 @@ export function CatalogCard({
           src={asset(image)}
           alt={alt}
           fill
+          loading="eager"
           className="fluid-shift object-cover object-center"
           sizes={sizes}
         />
